@@ -3,15 +3,19 @@ from celery import shared_task
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 from time import sleep
+from django.utils import timezone
+from datetime import timedelta
 
 User = get_user_model()
 
 
 @shared_task(bind=True)
-def send_mail_func(self):
+def send_mail_func(self, data):
+    print(data)  # ptint data from args
     print("triggered send_mail_func")
     from_email = os.environ.get("EMAIL_HOST_USER")
     users = User.objects.all()
+    # timezone.localtime(user.date_time)
     for user in users:
         mail_subject = "Test mail"
         message = "This is a test mail message"
